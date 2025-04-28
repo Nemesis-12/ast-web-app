@@ -1,0 +1,47 @@
+{
+open Absyn
+open Par
+open FSharp.Text.Lexing
+
+let lexemeAsString (lexbuf: LexBuffer<char>) =
+  LexBuffer<char>.LexemeString lexbuf
+
+let keyword (s: string) =
+  match s with
+  | "let"   -> LET
+  | "in"    -> IN
+  | "end"   -> END
+  | "if"    -> IF
+  | "then"  -> THEN
+  | "else"  -> ELSE
+  | "fun"   -> FUN
+  | other   -> NAME(other)
+}
+
+rule token = parse
+  | "->"                       { ARROW }
+  | "+"                        { PLUS }
+  | "-"                        { MINUS }
+  | "*"                        { TIMES }
+  | "="                        { EQ }
+  | "<"                        { LT }
+  | ">"                        { GT }
+  | "&&"                       { AND }
+  | "||"                       { OR }
+  | "("                        { LPAR }
+  | ")"                        { RPAR }
+  | "true"                     { CSTBOOL(true) }
+  | "false"                    { CSTBOOL(false) }
+
+  // **Numbers** – use lexemeAsString, not `as i`
+  | ['0'-'9']+                 { let txt = lexemeAsString lexbuf in CSTINT(int txt) }
+
+  // **Identifiers** – same idea
+  | ['a'-'z' 'A'-'Z']['a'-'z' 'A'-'Z' '0'-'9' '_']*
+                               { let id = lexemeAsString lexbuf in keyword id }
+
+  // Whitespace
+  | [' ' '\t' '\r' '\n']+      { token lexbuf }
+
+  | eof                        { EOF }
+  | _                          { failwith "Lexer error: illegal symbol" }
