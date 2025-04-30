@@ -10,7 +10,6 @@ type expr =
     | Fun of string * expr                // Function declaration
     | App of expr * expr                  // Function application
 
-// Function to convert AST to a JSON-friendly format
 let rec toJson (e: expr) =
     match e with
     | CstI i -> 
