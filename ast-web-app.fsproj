@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <FsLexToolExe>fslex.dll</FsLexToolExe>
+    <FsYaccToolExe>fsyacc.dll</FsYaccToolExe>
+    <FsLexOutputFolder>Parser\</FsLexOutputFolder>
+    <FsYaccOutputFolder>Parser\</FsYaccOutputFolder>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Parser and Lexer files -->
+    <FsYacc Include="Parser\Par.fsy">
+      <OtherFlags>--module Par</OtherFlags>
+    </FsYacc>
+    <FsLex Include="Parser\Lex.fsl">
+      <OtherFlags>--module Lex --unicode</OtherFlags>
+    </FsLex>
+    
+    <!-- Compile order matters! -->
+    <Compile Include="Parser\Absyn.fs" />
+    <Compile Include="Parser\Par.fs" />
+    <Compile Include="Parser\Lex.fs" />
+    <Compile Include="Parser\Parse.fs" />
+    <Compile Include="Startup.fs" />
+    <Compile Include="AST.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FsLexYacc" Version="11.3.0" />
+    <PackageReference Include="FsLexYacc.Runtime" Version="11.3.0" />
+  </ItemGroup>
+</Project>
