@@ -31,5 +31,15 @@ let rec toJson (e: expr) =
         sprintf """{"type": "Fun", "param": "%s", "body": %s}""" 
             x (toJson e)
     | App(e1, e2) -> 
-        sprintf """{"type": "App", "function": %s, "argument": %s}""" 
+        sprintf """{"type": "", "function": %s, "argument": %s}""" 
             (toJson e1) (toJson e2)
+
+let rec toBracketNotation (e: expr) =
+    match e with
+    | CstI i -> string i
+    | Var x -> $"[Var {x}]"
+    | Prim(op, e1, e2) -> $"[Prim {op} {toBracketNotation e1} {toBracketNotation e2}]"
+    | Let(x, e1, e2) -> $"[Let [Var {x}] {toBracketNotation e1} {toBracketNotation e2}]"
+    | If(e1, e2, e3) -> $"[If {toBracketNotation e1} {toBracketNotation e2} {toBracketNotation e3}]"
+    | Fun(x, body) -> $"[Fun [Param {x}] {toBracketNotation body}]"
+    | App(f, arg) -> $"[App {toBracketNotation f} {toBracketNotation arg}]"
