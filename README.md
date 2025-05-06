@@ -5,6 +5,10 @@ This is a web app that displays the AST for MicroML code, built using F#, .NET, 
 - Take User input: Allows user to enter MicroML expression
 - Display AST: Display AST for the entered MicroML expression
 
+<div align="center">
+  <img src="ast.png" alt="AST Page" width="600">
+</div>
+
 ## Requirements
 - .NET SDK 9
 - F#
